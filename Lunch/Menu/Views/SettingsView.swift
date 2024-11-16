@@ -4,6 +4,7 @@ struct SettingsView: View {
     @AppStorage("showWholeMenu") private var showWholeMenu: Bool = true
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
     @AppStorage("showLocationPickerOnMainView") private var showLocationPickerOnMainView: Bool = false
+    @AppStorage("showPayLinkOnMainView") private var showPayLinkOnMainView: Bool = false
     @AppStorage("showDagensVarmMat") private var showDagensVarmMat: Bool = true
     @AppStorage("showDagensSuppe") private var showDagensSuppe: Bool = true
     @AppStorage("showDagensSalat") private var showDagensSalat: Bool = false
@@ -48,6 +49,7 @@ struct SettingsView: View {
             Section(header: Text("Hovedside innstillinger")) {
                 Toggle("Vis visningsvelger", isOn: $showMenuPickerOnMainView)
                 Toggle("Vis lokasjonsvelger", isOn: $showLocationPickerOnMainView)
+                Toggle("Vis link til nettside", isOn: $showPayLinkOnMainView)
             }
             
             Section(header: Text("Annet")) {

@@ -7,6 +7,7 @@ struct ContentView: View {
     @AppStorage("showWholeMenu") private var showWholeMenu: Bool = true
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
     @AppStorage("showLocationPickerOnMainView") private var showLocationPickerOnMainView: Bool = false
+    @AppStorage("showPayLinkOnMainView") private var showPayLinkOnMainView: Bool = false
     @AppStorage("selectedLocation") private var selectedLocation: String = "N58"
     
     @State private var lunchMenu: [String: DailyMenu] = [:]
@@ -35,22 +36,8 @@ struct ContentView: View {
                     }
                 }
                 
-                if showLocationPickerOnMainView {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Menu {
-                            Picker("Location", selection: $selectedLocation) {
-                                Text("FB38").tag("FB38")
-                                Text("N58").tag("N58")
-                            }
-                        } label: {
-                            Image(systemName: "fork.knife.circle.fill")
-                                .foregroundStyle(.foreground)
-                        }
-                    }
-                }
-                
                 if showMenuPickerOnMainView {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .topBarLeading) {
                         Menu {
                             Picker("View Mode", selection: $showWholeMenu) {
                                 Text("I dag").tag(false)
@@ -58,6 +45,20 @@ struct ContentView: View {
                             }
                         } label: {
                             Image(systemName: "calendar")
+                                .foregroundStyle(.foreground)
+                        }
+                    }
+                }
+                
+                if showLocationPickerOnMainView {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu {
+                            Picker("Location", selection: $selectedLocation) {
+                                Text("FB38").tag("FB38")
+                                Text("N58").tag("N58")
+                            }
+                        } label: {
+                            Image(systemName: "fork.knife.circle.fill")
                                 .foregroundStyle(.foreground)
                         }
                     }
@@ -97,6 +98,15 @@ struct ContentView: View {
                 wholeMenuView
             } else {
                 todayMenuView
+            }
+            
+            if showPayLinkOnMainView {
+                Button(action: openPayLink) {
+                    Label("Nettside", systemImage: "creditcard.fill")
+//                    Image(systemName: "creditcard.fill")
+                        .foregroundStyle(.foreground)
+                        .padding(.vertical, 12)
+                }
             }
         }
         .frame(maxWidth: .infinity)
@@ -179,7 +189,7 @@ struct ContentView: View {
         task.resume()
     }
     
-    private func parseFB38(_ html: String) {
+    private func parseFB38AndSetMenu(_ html: String) {
         do {
             let menu = try FB38LunchMenuParser.parse(html: html)
             DispatchQueue.main.async {
@@ -198,7 +208,7 @@ struct ContentView: View {
         }
     }
     
-    private func parseN58(_ html: String) {
+    private func parseN58AndSetMenu(_ html: String) {
         do {
             let menu = try N58LunchMenuParser.parse(html: html)
             DispatchQueue.main.async {
@@ -219,9 +229,9 @@ struct ContentView: View {
     
     private func parseAndSetMenu(_ html: String) {
         if selectedLocation == "FB38" {
-            parseFB38(html)
+            parseFB38AndSetMenu(html)
         } else if selectedLocation == "N58" {
-            parseN58(html)
+            parseN58AndSetMenu(html)
         }
     }
     
