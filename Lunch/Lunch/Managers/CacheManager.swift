@@ -31,7 +31,7 @@ class CacheManager {
                 
                 // Check if the cache is expired
                 let cacheDate = Date(timeIntervalSince1970: timestamp)
-                let expirationDate = cacheDate.addingTimeInterval(0) // 1 hour
+                let expirationDate = cacheDate.addingTimeInterval(86400 * 3) // 3 days
                 let isExpired = Date() > expirationDate
                 
                 return (data, isExpired)
