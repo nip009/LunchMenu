@@ -53,8 +53,9 @@ private func extractCategory(from text: String, category: String, nextCategory: 
     // Extract the content between the category and the next category
     let contentRange = categoryRange.upperBound..<endRange.lowerBound
     let content = text[contentRange]
-//        .replacingOccurrences(of: "(-) ", with: "\n")
-        .replacingOccurrences(of: "\\s*\\([^)]*\\) ", with: "\n", options: .regularExpression) // Remove everything in parentheses. Replace it with newline.
+        .replacingOccurrences(of: "(-)", with: "\n")
+        .replacingOccurrences(of: "\\s*\\([^)]*\\)", with: "\n", options: .regularExpression) // Remove everything in parentheses. Replace it with newline.
+        .replacingOccurrences(of: "\n ", with: "\n")
         .trimmingCharacters(in: .whitespacesAndNewlines)
     return content
 }

@@ -4,6 +4,9 @@ struct SettingsView: View {
     @AppStorage("showWholeMenu") private var showWholeMenu: Bool = true
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
     @AppStorage("showLocationPickerOnMainView") private var showLocationPickerOnMainView: Bool = false
+    @AppStorage("showDagensVarmMat") private var showDagensVarmMat: Bool = true
+    @AppStorage("showDagensSuppe") private var showDagensSuppe: Bool = true
+    @AppStorage("showDagensSalat") private var showDagensSalat: Bool = false
     @AppStorage("selectedLocation") private var selectedLocation: String = "N58"
     
     var body: some View {
@@ -35,6 +38,12 @@ struct SettingsView: View {
                             .contentShape(Rectangle())
                             .foregroundStyle(.foreground)
                     }
+                }
+                
+                Section(header: Text("Mat")) {
+                    Toggle("Vis dagens varmmat", isOn: $showDagensVarmMat)
+                    Toggle("Vis dagens suppe", isOn: $showDagensSuppe)
+                    Toggle("Vis dagens salat", isOn: $showDagensSalat)
                 }
                 
                 Section(header: Text("Hovedside innstillinger")) {

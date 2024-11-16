@@ -107,7 +107,7 @@ struct ContentView: View {
         VStack(spacing: 16) {
             ForEach(dayOrder, id: \.self) { day in
                 if let dailyMenu = lunchMenu[day.rawValue] {
-                    DailyMenuView(day: day, dailyMenu: dailyMenu)
+                    DailyMenuView(day: day, menu: dailyMenu)
                 }
             }
         }
@@ -116,7 +116,7 @@ struct ContentView: View {
     @ViewBuilder
     var todayMenuView: some View {
         if let today = currentDay(), let todayMenu = lunchMenu[today.rawValue] {
-            DailyMenuView(day: today, dailyMenu: todayMenu)
+            DailyMenuView(day: today, menu: todayMenu)
         } else {
             Text("Ingen meny tilgjengelig i dag")
                 .italic()
