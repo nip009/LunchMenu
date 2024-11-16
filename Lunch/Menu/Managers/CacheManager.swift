@@ -10,6 +10,11 @@ class CacheManager {
     }
 
     func saveToCache(data: String) {
+        guard !data.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            print("Error: Attempted to save empty or invalid data to cache.")
+            return
+        }
+        
         let cache = [
             "data": data,
             "timestamp": Date().timeIntervalSince1970 // Save the current timestamp
@@ -26,6 +31,12 @@ class CacheManager {
 
     func loadFromCache() -> (data: String, isExpired: Bool)? {
         let fileURL = getCacheFileURL()
+        
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
+            print("Cache file does not exist")
+            return nil
+        }
+        
         do {
             let jsonData = try Data(contentsOf: fileURL)
             if let cache = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
@@ -38,6 +49,8 @@ class CacheManager {
                 let isExpired = Date() > expirationDate
                 
                 return (data, isExpired)
+            } else {
+                print("Warning: Cache data is empty or invalid.")
             }
         } catch {
             print("Failed to load cache: \(error)")

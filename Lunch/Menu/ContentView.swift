@@ -162,14 +162,14 @@ struct ContentView: View {
                 return
             }
 
-            guard let data = data, let html = String(data: data, encoding: .utf8) else {
+            guard let data = data, let html = String(data: data, encoding: .utf8), !html.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                 DispatchQueue.main.async {
-                    errorMessage = "Failed to decode response"
+                    errorMessage = "Received empty or invalid data from server."
                 }
                 return
             }
 
-            // Cache the response
+            // Cache the response if valid
             CacheManager.shared.saveToCache(data: html)
             print("Saved to cache")
 
