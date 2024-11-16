@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import SwiftSoup
 
-// An app that shows the lunch menu at FB38 in Fyllingsdalen 😋
+// An app that shows the lunch menu at FB38 in Fyllingsdalen or N58 in Nøstegaten 😋
 struct ContentView: View {
     @AppStorage("showWholeMenu") private var showWholeMenu: Bool = true
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
