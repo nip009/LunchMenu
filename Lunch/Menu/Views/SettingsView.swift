@@ -10,59 +10,57 @@ struct SettingsView: View {
     @AppStorage("selectedLocation") private var selectedLocation: String = "N58"
     
     var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("Lunsj hos")) {
-                    Menu {
-                        Picker("Lunsj hos", selection: $selectedLocation) {
-                            Text("FB38").tag("FB38")
-                            Text("N58").tag("N58")
-                        }
-                    } label: {
-                        Label("\(selectedLocation)", systemImage: "fork.knife.circle.fill")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                            .foregroundStyle(.foreground)
+        List {
+            Section(header: Text("Lunsj hos")) {
+                Menu {
+                    Picker("Lunsj hos", selection: $selectedLocation) {
+                        Text("FB38").tag("FB38")
+                        Text("N58").tag("N58")
                     }
-                }
-                
-                Section(header: Text("Visning")) {
-                    Menu {
-                        Picker("Visning", selection: $showWholeMenu) {
-                            Text("I dag").tag(false)
-                            Text("Uke").tag(true)
-                        }
-                    } label: {
-                        Label("\(showWholeMenu ? "Uke" : "I dag")", systemImage: "calendar")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                            .foregroundStyle(.foreground)
-                    }
-                }
-                
-                Section(header: Text("Mat")) {
-                    Toggle("Vis dagens varmmat", isOn: $showDagensVarmMat)
-                    Toggle("Vis dagens suppe", isOn: $showDagensSuppe)
-                    Toggle("Vis dagens salat", isOn: $showDagensSalat)
-                }
-                
-                Section(header: Text("Hovedside innstillinger")) {
-                    Toggle("Vis visningsvelger", isOn: $showMenuPickerOnMainView)
-                    Toggle("Vis lokasjonsvelger", isOn: $showLocationPickerOnMainView)
-                }
-                
-                Section(header: Text("Annet")) {
-                    Button(action: CacheManager.shared.clearAllCaches) {
-                        Text("Clear cache")
-                            .foregroundStyle(.foreground)
-                    }
+                } label: {
+                    Label("\(selectedLocation)", systemImage: "fork.knife.circle.fill")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .foregroundStyle(.foreground)
                 }
             }
-            .navigationTitle("Innstillinger")
-            .navigationBarTitleDisplayMode(.inline)
-            .listSectionSpacing(.compact)
-            .scrollContentBackground(.hidden)
-            .background(Color.blue.opacity(0.25).gradient)
+            
+            Section(header: Text("Visning")) {
+                Menu {
+                    Picker("Visning", selection: $showWholeMenu) {
+                        Text("I dag").tag(false)
+                        Text("Uke").tag(true)
+                    }
+                } label: {
+                    Label("\(showWholeMenu ? "Uke" : "I dag")", systemImage: "calendar")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .foregroundStyle(.foreground)
+                }
+            }
+            
+            Section(header: Text("Mat")) {
+                Toggle("Vis dagens varmmat", isOn: $showDagensVarmMat)
+                Toggle("Vis dagens suppe", isOn: $showDagensSuppe)
+                Toggle("Vis dagens salat", isOn: $showDagensSalat)
+            }
+            
+            Section(header: Text("Hovedside innstillinger")) {
+                Toggle("Vis visningsvelger", isOn: $showMenuPickerOnMainView)
+                Toggle("Vis lokasjonsvelger", isOn: $showLocationPickerOnMainView)
+            }
+            
+            Section(header: Text("Annet")) {
+                Button(action: CacheManager.shared.clearAllCaches) {
+                    Text("Clear cache")
+                        .foregroundStyle(.foreground)
+                }
+            }
         }
+        .navigationTitle("Innstillinger")
+        .navigationBarTitleDisplayMode(.inline)
+        .listSectionSpacing(.compact)
+        .scrollContentBackground(.hidden)
+        .background(Color.blue.opacity(0.25).gradient)
     }
 }
