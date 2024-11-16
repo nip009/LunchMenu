@@ -4,6 +4,8 @@ import SwiftSoup
 
 // An app that shows the lunch menu at FB38 in Fyllingsdalen or N58 in Nøstegaten 😋
 struct ContentView: View {
+    @Environment(\.openURL) private var openURL
+
     @AppStorage("showWholeMenu") private var showWholeMenu: Bool = true
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
     @AppStorage("showLocationPickerOnMainView") private var showLocationPickerOnMainView: Bool = false
@@ -136,7 +138,7 @@ struct ContentView: View {
     func openPayLink() {
         let urlString = selectedLocation == "FB38" ? fb38PayURLString : n58PayURLString
         if let url = URL(string: urlString) {
-            UIApplication.shared.open(url)
+            openURL(url)
         }
     }
     
@@ -237,29 +239,5 @@ struct ContentView: View {
     
     func currentDay() -> WeekDay? {
         return WeekDay.currentDay()
-    }
-}
-
-enum WeekDay: String, CaseIterable {
-    case mandag = "MANDAG"
-    case tirsdag = "TIRSDAG"
-    case onsdag = "ONSDAG"
-    case torsdag = "TORSDAG"
-    case fredag = "FREDAG"
-
-    static func currentDay() -> WeekDay? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE"
-        formatter.locale = Locale(identifier: "no_NO")
-        let dayName = formatter.string(from: Date()).lowercased()
-
-        switch dayName {
-        case "mandag": return .mandag
-        case "tirsdag": return .tirsdag
-        case "onsdag": return .onsdag
-        case "torsdag": return .torsdag
-        case "fredag": return .fredag
-        default: return nil
-        }
     }
 }

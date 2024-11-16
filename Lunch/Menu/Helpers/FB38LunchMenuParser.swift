@@ -1,11 +1,5 @@
 import SwiftSoup
 
-struct DailyMenu {
-    var varmMat: String
-    var dagensSuppe: String
-    var dagensSalat: String
-}
-
 class FB38LunchMenuParser {
     static func parse(html: String) throws -> [String: DailyMenu] {
         var menu = [String: DailyMenu]()

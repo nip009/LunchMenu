@@ -9,10 +9,38 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>LunchWidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>Lunsj.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>C83FF89D2CE919D400316DA3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C8DBD6792CE7DBD70065D2A2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C8DBD6892CE7DBDC0065D2A2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C8DBD6932CE7DBDC0065D2A2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
