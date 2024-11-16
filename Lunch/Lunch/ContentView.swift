@@ -83,7 +83,7 @@ struct ContentView: View {
         if let today = currentDay(), let todayMenu = lunchMenu[today.rawValue] {
             DailyMenuView(day: today, dailyMenu: todayMenu)
         } else {
-            Text("No menu available for today.")
+            Text("Ingen meny tilgjengelig i dag")
                 .italic()
         }
     }
