@@ -1,4 +1,5 @@
 import WidgetKit
+import AppIntents
 import SwiftUI
 
 struct Provider: AppIntentTimelineProvider {
@@ -11,20 +12,30 @@ struct Provider: AppIntentTimelineProvider {
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        let entries: [SimpleEntry] = generateEntries(from: DailyMenu.mockMenus)
+        let menus = configuration.selectedLocation.rawValue == "FB38"
+        ? DailyMenu.fb38mockMenus
+        : DailyMenu.n58mockMenus
+        
+        let entries: [SimpleEntry] = generateEntries(from: menus, configuration: configuration)
         return Timeline(entries: entries, policy: .atEnd)
     }
 }
 
-func generateEntries(from menus: [String: DailyMenu]) -> [SimpleEntry] {
+func generateEntries(from menus: [String: DailyMenu], configuration: ConfigurationAppIntent) -> [SimpleEntry] {
     var entries: [SimpleEntry] = []
     let calendar = Calendar.current
     var date = calendar.startOfDay(for: Date())
 
     for weekday in WeekDay.orderedDays {
         if let menu = menus[weekday.rawValue] {
-            let entry = SimpleEntry(date: date, day: weekday.rawValue, menu: menu, configuration: ConfigurationAppIntent())
+            let entry = SimpleEntry(
+                date: date,
+                day: weekday.rawValue,
+                menu: menu,
+                configuration: configuration
+            )
             entries.append(entry)
+
             date = calendar.date(byAdding: .day, value: 1, to: date) ?? date
         }
     }
@@ -40,8 +51,6 @@ struct SimpleEntry: TimelineEntry {
 }
 
 struct LunchWidgetEntryView : View {
-    @AppStorage("selectedLocation") private var selectedLocation: String = "N58"
-    
     var entry: Provider.Entry
     
     var menu: DailyMenu { entry.menu }
@@ -56,13 +65,13 @@ struct LunchWidgetEntryView : View {
                     
                     Spacer()
                     
-                    Text("\(selectedLocation)")
+                    Text("\(entry.configuration.selectedLocation.rawValue)")
                         .font(.title2)
                         .bold()
                         .padding(3)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(selectedLocation == "FB38" ?  Color.orange : Color.gray.opacity(0.5))
+                                .fill(entry.configuration.selectedLocation.rawValue == "FB38" ?  Color.orange : Color.gray.opacity(0.5))
                         )
                 }
                 Group {
@@ -96,26 +105,12 @@ struct LunchWidget: Widget {
     }
 }
 
-extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
-        return intent
-    }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
-        return intent
-    }
-}
-
 #Preview(as: .systemMedium) {
     LunchWidget()
 } timeline: {
-    SimpleEntry(date: .now, day: WeekDay.mandag.rawValue, menu: DailyMenu.mockMenus[WeekDay.mandag.rawValue] ?? DailyMenu.mock, configuration: .smiley)
-    SimpleEntry(date: .now, day: WeekDay.tirsdag.rawValue, menu: DailyMenu.mockMenus[WeekDay.tirsdag.rawValue] ?? DailyMenu.mock, configuration: .starEyes)
-    SimpleEntry(date: .now, day: WeekDay.onsdag.rawValue, menu: DailyMenu.mockMenus[WeekDay.onsdag.rawValue] ?? DailyMenu.mock, configuration: .starEyes)
-    SimpleEntry(date: .now, day: WeekDay.torsdag.rawValue, menu: DailyMenu.mockMenus[WeekDay.torsdag.rawValue] ?? DailyMenu.mock, configuration: .starEyes)
-    SimpleEntry(date: .now, day: WeekDay.fredag.rawValue, menu: DailyMenu.mockMenus[WeekDay.fredag.rawValue] ?? DailyMenu.mock, configuration: .starEyes)
+    SimpleEntry(date: .now, day: WeekDay.mandag.rawValue, menu: DailyMenu.fb38mockMenus[WeekDay.mandag.rawValue] ?? DailyMenu.mock, configuration: ConfigurationAppIntent())
+    SimpleEntry(date: .now, day: WeekDay.tirsdag.rawValue, menu: DailyMenu.fb38mockMenus[WeekDay.tirsdag.rawValue] ?? DailyMenu.mock, configuration: ConfigurationAppIntent())
+    SimpleEntry(date: .now, day: WeekDay.onsdag.rawValue, menu: DailyMenu.fb38mockMenus[WeekDay.onsdag.rawValue] ?? DailyMenu.mock, configuration: ConfigurationAppIntent())
+    SimpleEntry(date: .now, day: WeekDay.torsdag.rawValue, menu: DailyMenu.fb38mockMenus[WeekDay.torsdag.rawValue] ?? DailyMenu.mock, configuration: ConfigurationAppIntent())
+    SimpleEntry(date: .now, day: WeekDay.fredag.rawValue, menu: DailyMenu.fb38mockMenus[WeekDay.fredag.rawValue] ?? DailyMenu.mock, configuration: ConfigurationAppIntent())
 }

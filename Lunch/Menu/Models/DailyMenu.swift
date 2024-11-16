@@ -14,7 +14,7 @@ extension DailyMenu {
         DailyMenu(varmMat: "Pizza\nIndisk curry", dagensSuppe: "Tomatsuppe", dagensSalat: "Pasta salat")
     }
     
-    static var mockMenus: [String: DailyMenu] {
+    static var fb38mockMenus: [String: DailyMenu] {
         return [
             WeekDay.mandag.rawValue : DailyMenu(
                 varmMat: "Chili con Carne, tortilla chips, rømme og ris\nChili sin Carne",
@@ -33,6 +33,35 @@ extension DailyMenu {
             ),
             WeekDay.torsdag.rawValue: DailyMenu(
                 varmMat: "Sei Cordon Bleu\n Ratatouille og hvitløksbrød",
+                dagensSuppe: "Søtpotet suppe",
+                dagensSalat: "Pastasalat"
+            ),
+            WeekDay.fredag.rawValue: DailyMenu(
+                varmMat: "Marokkansk lammegryte med krydret couscous\nChicken fried rice",
+                dagensSuppe: "Taco suppe",
+                dagensSalat: "Quinoasalat"
+            )
+        ]
+    }
+    static var n58mockMenus: [String: DailyMenu] {
+        return [
+            WeekDay.mandag.rawValue : DailyMenu(
+                varmMat: "Blabla",
+                dagensSuppe: "Tomat suppe",
+                dagensSalat: "Blomkål salat"
+            ),
+            WeekDay.tirsdag.rawValue: DailyMenu(
+                varmMat: "Spaghetti\nPizza",
+                dagensSuppe: "Blomkålsuppe",
+                dagensSalat: "Pasta salat"
+            ),
+            WeekDay.onsdag.rawValue: DailyMenu(
+                varmMat: "BlablaKyllingtaco\nTortilla med panert fisk og coleslaw",
+                dagensSuppe: "Kremet paprika suppe",
+                dagensSalat: "Gresk salat"
+            ),
+            WeekDay.torsdag.rawValue: DailyMenu(
+                varmMat: "BlablaSei Cordon Bleu\n Ratatouille og hvitløksbrød",
                 dagensSuppe: "Søtpotet suppe",
                 dagensSalat: "Pastasalat"
             ),
