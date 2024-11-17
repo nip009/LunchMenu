@@ -1,11 +1,19 @@
 import Foundation
+import WidgetKit
+
+// Data shared through App Group needs to be sent through UserDefaults with this suiteName
+let appGroupID = "group.com.example.share.token"
+
+extension UserDefaults {
+    static let shared = UserDefaults(suiteName: appGroupID)!
+}
 
 class CacheManager {
     static let shared = CacheManager()
     private init() {}
-
+    
     var cacheFileName: String {
-        let selectedLocation = UserDefaults.standard.string(forKey: "selectedLocation") ?? "FB38"
+        let selectedLocation = UserDefaults.shared.string(forKey: "selectedLocation") ?? "FB38"
         return "\(selectedLocation)_LunchMenuCache.json"
     }
 
@@ -24,6 +32,8 @@ class CacheManager {
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: cache, options: [])
             try jsonData.write(to: fileURL, options: .atomic)
+            print("Saved data to cache at \(fileURL). Calling WidgetCenter.shared.reloadAllTimelines()")
+            WidgetCenter.shared.reloadAllTimelines()
         } catch {
             print("Failed to save cache: \(error)")
         }
@@ -33,9 +43,10 @@ class CacheManager {
         let fileURL = getCacheFileURL()
         
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
-            print("Cache file does not exist")
+            print("Cache file does not exist at \(fileURL)")
             return nil
         }
+        print("✅ Cache exists at \(fileURL)!")
         
         do {
             let jsonData = try Data(contentsOf: fileURL)
@@ -59,7 +70,11 @@ class CacheManager {
     }
     
     func clearAllCaches() {
-        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        guard let cachesDirectory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
+            print("Failed to access shared App Group directory.")
+            return
+        }
+        
         do {
             let files = try FileManager.default.contentsOfDirectory(at: cachesDirectory, includingPropertiesForKeys: nil)
             
@@ -75,7 +90,9 @@ class CacheManager {
     }
 
     private func getCacheFileURL() -> URL {
-        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        guard let cachesDirectory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
+            fatalError("Failed to access shared App Group directory.")
+        }
         return cachesDirectory.appendingPathComponent(cacheFileName)
     }
 }

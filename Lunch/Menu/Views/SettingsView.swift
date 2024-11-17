@@ -8,7 +8,7 @@ struct SettingsView: View {
     @AppStorage("showDagensVarmMat") private var showDagensVarmMat: Bool = true
     @AppStorage("showDagensSuppe") private var showDagensSuppe: Bool = true
     @AppStorage("showDagensSalat") private var showDagensSalat: Bool = false
-    @AppStorage("selectedLocation") private var selectedLocation: String = "N58"
+    @AppStorage("selectedLocation", store: UserDefaults.shared) private var selectedLocation: String = "N58"
     
     var body: some View {
         List {

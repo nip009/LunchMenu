@@ -10,7 +10,7 @@ struct ContentView: View {
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
     @AppStorage("showLocationPickerOnMainView") private var showLocationPickerOnMainView: Bool = false
     @AppStorage("showPayLinkOnMainView") private var showPayLinkOnMainView: Bool = false
-    @AppStorage("selectedLocation") private var selectedLocation: String = "N58"
+    @AppStorage("selectedLocation", store: UserDefaults.shared) private var selectedLocation: String = "N58"
     
     @State private var lunchMenu: [String: DailyMenu] = [:]
     @State private var errorMessage: String?

@@ -11,6 +11,7 @@
 		C83FF8A12CE919D400316DA3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C83FF8A02CE919D400316DA3 /* WidgetKit.framework */; };
 		C83FF8A32CE919D400316DA3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C83FF8A22CE919D400316DA3 /* SwiftUI.framework */; };
 		C83FF8B52CE919D700316DA3 /* LunchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C83FF89E2CE919D400316DA3 /* LunchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C8E9099E2CE97B170084E81D /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = C8E9099D2CE97B170084E81D /* SwiftSoup */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		C83FF89E2CE919D400316DA3 /* LunchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LunchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C83FF8A02CE919D400316DA3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		C83FF8A22CE919D400316DA3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		C85BCE342CE96DA2004B4259 /* Lunsj.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Lunsj.entitlements; sourceTree = "<group>"; };
+		C85BCE352CE96DF2004B4259 /* LunchWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LunchWidgetExtension.entitlements; sourceTree = "<group>"; };
 		C8DBD67A2CE7DBD70065D2A2 /* Lunsj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lunsj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8DBD68A2CE7DBDC0065D2A2 /* LunsjTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LunsjTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8DBD6942CE7DBDC0065D2A2 /* LunsjUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LunsjUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +74,9 @@
 		C87EFA362CE922D800AFC3F7 /* Exceptions for "Menu" folder in "LunchWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Helpers/FB38LunchMenuParser.swift,
+				Helpers/N58LunchMenuParser.swift,
+				Managers/CacheManager.swift,
 				Models/DailyMenu.swift,
 				Models/WeekDay.swift,
 			);
@@ -114,6 +120,7 @@
 			files = (
 				C83FF8A32CE919D400316DA3 /* SwiftUI.framework in Frameworks */,
 				C83FF8A12CE919D400316DA3 /* WidgetKit.framework in Frameworks */,
+				C8E9099E2CE97B170084E81D /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +161,8 @@
 		C8DBD6712CE7DBD70065D2A2 = {
 			isa = PBXGroup;
 			children = (
+				C85BCE352CE96DF2004B4259 /* LunchWidgetExtension.entitlements */,
+				C85BCE342CE96DA2004B4259 /* Lunsj.entitlements */,
 				C8DBD67C2CE7DBD70065D2A2 /* Menu */,
 				C8DBD68D2CE7DBDC0065D2A2 /* MenuTests */,
 				C8DBD6972CE7DBDC0065D2A2 /* MenuUITests */,
@@ -194,6 +203,7 @@
 			);
 			name = LunchWidgetExtension;
 			packageProductDependencies = (
+				C8E9099D2CE97B170084E81D /* SwiftSoup */,
 			);
 			productName = LunchWidgetExtension;
 			productReference = C83FF89E2CE919D400316DA3 /* LunchWidgetExtension.appex */;
@@ -407,6 +417,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LunchWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L3H7Q4Y86B;
@@ -434,6 +445,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = LunchWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L3H7Q4Y86B;
@@ -580,6 +592,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Lunsj.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Menu/Preview Content\"";
@@ -609,6 +622,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Lunsj.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Menu/Preview Content\"";
@@ -768,6 +782,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		C82A20832CE7E1260041CC89 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8DBD6A72CE7E0370065D2A2 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		C8E9099D2CE97B170084E81D /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C8DBD6A72CE7E0370065D2A2 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;

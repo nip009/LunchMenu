@@ -23,16 +23,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "EC36E41A-1741-4F1F-B064-33C7A4E07CC1"
+            uuid = "1A39C766-2B31-4339-B62C-400965E50634"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "LunchWidget/LunchWidget.swift"
+            filePath = "LunchWidget/AppIntent.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "timeline(for:in:)"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "perform()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

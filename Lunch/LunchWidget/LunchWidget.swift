@@ -8,17 +8,67 @@ struct Provider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), day: WeekDay.fredag.rawValue, menu: DailyMenu.mock, configuration: configuration)
+        if let cachedData = CacheManager.shared.loadFromCache(),
+            let today = WeekDay.currentDay() {
+            let menuDict = parseMenu(cachedData.data, configuration: configuration)
+            let menu = menuDict?[today.rawValue] ?? DailyMenu.mock
+            return SimpleEntry(date: Date(), day: today.rawValue, menu: menu, configuration: configuration)
+        }
+        
+        // Fallback to mock data
+        return SimpleEntry(date: Date(), day: WeekDay.currentDay()?.rawValue ?? WeekDay.mandag.rawValue, menu: DailyMenu.mock, configuration: configuration)
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        let menus = configuration.selectedLocation.rawValue == "FB38"
-        ? DailyMenu.fb38mockMenus
-        : DailyMenu.n58mockMenus
+        if let cachedData = CacheManager.shared.loadFromCache(),
+           let menu = parseMenu(cachedData.data, configuration: configuration){
+            let entries = generateEntries(from: menu, configuration: configuration)
+            
+            // Update timeline to refresh next Monday at 7 AM or the next day
+            let nextUpdate = Calendar.current.nextDate(
+                after: Date(), // TODO: Start of day?
+                matching: DateComponents(hour: 7, weekday: 2),
+                matchingPolicy: .nextTime
+            ) ?? Date().addingTimeInterval(86400)
+            return Timeline(entries: entries, policy: .after(nextUpdate))
+        }
         
-        let entries: [SimpleEntry] = generateEntries(from: menus, configuration: configuration)
+        // Return empty entries if cache is not available
+        let entries: [SimpleEntry] = []
         return Timeline(entries: entries, policy: .atEnd)
     }
+}
+
+func parseMenu(_ html: String, configuration: ConfigurationAppIntent) -> [String: DailyMenu]? {
+    if configuration.selectedLocation.rawValue == "FB38" {
+        return parseFB38Menu(html)
+    } else {
+        return parseN58Menu(html)
+    }
+ }
+
+private func parseFB38Menu(_ html: String) -> [String: DailyMenu]? {
+    do {
+        let menu = try FB38LunchMenuParser.parse(html: html)
+        return menu
+    } catch {
+        DispatchQueue.main.async {
+            print("Failed to parse HTML: \(error.localizedDescription)")
+        }
+    }
+    return nil
+}
+
+private func parseN58Menu(_ html: String) -> [String: DailyMenu]? {
+    do {
+        let menu = try N58LunchMenuParser.parse(html: html)
+        return menu
+    } catch {
+        DispatchQueue.main.async {
+            print("Failed to parse HTML: \(error.localizedDescription)")
+        }
+    }
+    return nil
 }
 
 func generateEntries(from menus: [String: DailyMenu], configuration: ConfigurationAppIntent) -> [SimpleEntry] {
@@ -71,7 +121,9 @@ struct LunchWidgetEntryView : View {
                         .padding(3)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(entry.configuration.selectedLocation.rawValue == "FB38" ?  Color.orange : Color.gray.opacity(0.5))
+                                .fill(entry.configuration.selectedLocation.rawValue == "FB38"
+                                      ?  Color.orange
+                                      : Color.gray.opacity(0.5))
                         )
                 }
                 Group {
