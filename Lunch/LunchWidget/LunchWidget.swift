@@ -29,8 +29,26 @@ struct Provider: AppIntentTimelineProvider {
             matching: DateComponents(hour: 7, weekday: 2), // 2 = Monday
             matchingPolicy: .nextTime
         ) ?? now.addingTimeInterval(86400) // Default to 24 hours later if calculation fails
-
-        if let cachedData = CacheManager.shared.loadFromCache(for: configuration.selectedLocation.rawValue),
+        
+        // Retrieve the current selectedLocation from UserDefaults.shared
+        var currentLocation = UserDefaults.shared.string(forKey: "selectedLocation") ?? "N58"
+        
+        // Compare configuration.selectedLocation with UserDefaults.shared
+        if configuration.selectedLocation.rawValue != currentLocation {
+            // Update UserDefaults.shared if the value has changed
+            currentLocation = configuration.selectedLocation.rawValue
+            UserDefaults.shared.set(currentLocation, forKey: "selectedLocation")
+            UserDefaults.shared.synchronize() // Force synchronization
+            print("Synchronized selectedLocation to: \(currentLocation)")
+        }
+//        let selectedLocation = configuration.selectedLocation.rawValue // !!! The selectedLocation here is outdated
+        
+        // Update configuration.selectedLocation to use UserDefaults.shared so that it can be in sync with the main app selectedLocation
+//        let userDefaultsSelectedLocation = UserDefaults.shared.string(forKey: "selectedLocation") ?? "nil"
+//        let selectedLocation = userDefaultsSelectedLocation
+//        configuration.selectedLocation = LocationOption(rawValue: userDefaultsSelectedLocation) ?? LocationOption.n58
+        
+        if let cachedData = CacheManager.shared.loadFromCache(for: currentLocation),
            let menu = parseMenu(cachedData.data, configuration: configuration) {
             
             // Generate entries from cached data

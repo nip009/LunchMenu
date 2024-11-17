@@ -1,4 +1,5 @@
 import Foundation
+import WidgetKit
 import SwiftUI
 import SwiftSoup
 
@@ -79,8 +80,12 @@ struct ContentView: View {
             .refreshable {
                 fetchAndParseLunchMenu()
             }
-            .onChange(of: selectedLocation) {
+            .onChange(of: selectedLocation) { newValue in
                 fetchAndParseLunchMenu()
+                print("selectedLocation changed to: \(newValue)")
+                UserDefaults.shared.set(newValue, forKey: "selectedLocation")
+                print("Calling reloadAllTimelines from ContentView")
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }
@@ -158,6 +163,7 @@ struct ContentView: View {
         let fb38URLString = "https://fb38.squarespace.com/meny"
         let n58URLString = "https://drittserver.net/lunsj/"
         let urlString = selectedLocation == "FB38" ? fb38URLString : n58URLString
+        print("selectedLocation is \(selectedLocation) in fetchAndParseLunchMenu()")
 
         // Fetch from the website
         guard let url = URL(string: urlString) else {

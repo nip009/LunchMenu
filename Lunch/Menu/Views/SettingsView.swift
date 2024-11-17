@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 struct SettingsView: View {
     @AppStorage("showWholeMenu") private var showWholeMenu: Bool = true
@@ -17,6 +18,12 @@ struct SettingsView: View {
                     Picker("Lunsj hos", selection: $selectedLocation) {
                         Text("FB38").tag("FB38")
                         Text("N58").tag("N58")
+                    }
+                    .onChange(of: selectedLocation) { newValue in
+                        print("Selected location changed to: \(newValue). Calling reloadAllTimesLines from SettingsView")
+                        UserDefaults.shared.set(newValue, forKey: "selectedLocation")
+                        print("Calling reloadAllTimelines from SettingsView")
+                        WidgetCenter.shared.reloadAllTimelines()
                     }
                 } label: {
                     Label("\(selectedLocation)", systemImage: "fork.knife.circle.fill")

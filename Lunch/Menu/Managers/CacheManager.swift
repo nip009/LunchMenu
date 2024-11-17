@@ -15,11 +15,11 @@ class CacheManager {
     private init() {}
     
     func cacheFileName(for selectedLocation: String? = nil) -> String {
-        let selectedLocation = selectedLocation ?? UserDefaults.shared.string(forKey: "selectedLocation") ?? "FB38"
+        let selectedLocation = selectedLocation ?? UserDefaults.shared.string(forKey: "selectedLocation") ?? "N58"
         return "\(selectedLocation)_LunchMenuCache.json"
     }
 
-    func saveToCache(data: String, for selectedLocation: String? = nil) {
+    func saveToCache(data: String) {
         guard !data.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             print("Error: Attempted to save empty or invalid data to cache.")
             return
@@ -30,7 +30,7 @@ class CacheManager {
             "timestamp": Date().timeIntervalSince1970
         ] as [String: Any]
         
-        let fileURL = getCacheFileURL(for: selectedLocation)
+        let fileURL = getCacheFileURL()
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: cache, options: [])
             try jsonData.write(to: fileURL, options: .atomic)
@@ -43,6 +43,7 @@ class CacheManager {
 
     func loadFromCache(for selectedLocation: String? = nil) -> (data: String, isExpired: Bool)? {
         if let selectedLocation {
+            print("From Widget: Set selectedLoaction to \(selectedLocation)")
             UserDefaults.shared.set(selectedLocation, forKey: "selectedLocation")
         }
         let fileURL = getCacheFileURL(for: selectedLocation)
@@ -51,7 +52,7 @@ class CacheManager {
             print("Cache file does not exist at \(fileURL)")
             return nil
         }
-        print("✅ Cache exists at \(fileURL)!")
+        print("Cache exists for \(selectedLocation)")
         
         do {
             let jsonData = try Data(contentsOf: fileURL)
