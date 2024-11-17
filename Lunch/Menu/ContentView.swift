@@ -89,7 +89,7 @@ struct ContentView: View {
     var content: some View {
         VStack {
             if let errorMessage = errorMessage {
-                Text("Error: \(errorMessage)")
+                Text("\(errorMessage)")
                     .foregroundColor(.red)
             } else if lunchMenu.isEmpty {
                 VStack(spacing: 16) {
@@ -131,7 +131,6 @@ struct ContentView: View {
             DailyMenuView(day: today, menu: todayMenu)
         } else {
             Text("Ingen meny tilgjengelig i dag")
-                .italic()
         }
     }
     

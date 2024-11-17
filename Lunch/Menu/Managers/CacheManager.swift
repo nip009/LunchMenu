@@ -1,6 +1,8 @@
 import Foundation
 import WidgetKit
 
+// The widget has to send in selectedLocation manually, because the widget can't update UserDefaults reliably when it's edited.
+
 // Data shared through App Group needs to be sent through UserDefaults with this suiteName
 let appGroupID = "group.com.example.share.token"
 
@@ -12,12 +14,12 @@ class CacheManager {
     static let shared = CacheManager()
     private init() {}
     
-    var cacheFileName: String {
-        let selectedLocation = UserDefaults.shared.string(forKey: "selectedLocation") ?? "FB38"
+    func cacheFileName(for selectedLocation: String? = nil) -> String {
+        let selectedLocation = selectedLocation ?? UserDefaults.shared.string(forKey: "selectedLocation") ?? "FB38"
         return "\(selectedLocation)_LunchMenuCache.json"
     }
 
-    func saveToCache(data: String) {
+    func saveToCache(data: String, for selectedLocation: String? = nil) {
         guard !data.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             print("Error: Attempted to save empty or invalid data to cache.")
             return
@@ -25,10 +27,10 @@ class CacheManager {
         
         let cache = [
             "data": data,
-            "timestamp": Date().timeIntervalSince1970 // Save the current timestamp
+            "timestamp": Date().timeIntervalSince1970
         ] as [String: Any]
-
-        let fileURL = getCacheFileURL()
+        
+        let fileURL = getCacheFileURL(for: selectedLocation)
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: cache, options: [])
             try jsonData.write(to: fileURL, options: .atomic)
@@ -39,9 +41,12 @@ class CacheManager {
         }
     }
 
-    func loadFromCache() -> (data: String, isExpired: Bool)? {
-        let fileURL = getCacheFileURL()
-        
+    func loadFromCache(for selectedLocation: String? = nil) -> (data: String, isExpired: Bool)? {
+        if let selectedLocation {
+            UserDefaults.shared.set(selectedLocation, forKey: "selectedLocation")
+        }
+        let fileURL = getCacheFileURL(for: selectedLocation)
+
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
             print("Cache file does not exist at \(fileURL)")
             return nil
@@ -54,7 +59,6 @@ class CacheManager {
                let data = cache["data"] as? String,
                let timestamp = cache["timestamp"] as? TimeInterval {
                 
-                // Check if the cache is expired
                 let cacheDate = Date(timeIntervalSince1970: timestamp)
                 let expirationDate = cacheDate.addingTimeInterval(3600 * 2) // 2 hours
                 let isExpired = Date() > expirationDate
@@ -74,10 +78,10 @@ class CacheManager {
             print("Failed to access shared App Group directory.")
             return
         }
-        
+
         do {
             let files = try FileManager.default.contentsOfDirectory(at: cachesDirectory, includingPropertiesForKeys: nil)
-            
+
             for file in files {
                 if file.lastPathComponent.hasSuffix("_LunchMenuCache.json") {
                     try FileManager.default.removeItem(at: file)
@@ -89,11 +93,11 @@ class CacheManager {
         }
     }
 
-    private func getCacheFileURL() -> URL {
+    private func getCacheFileURL(for selectedLocation: String? = nil) -> URL {
         guard let cachesDirectory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
             fatalError("Failed to access shared App Group directory.")
         }
-        return cachesDirectory.appendingPathComponent(cacheFileName)
+        return cachesDirectory.appendingPathComponent(cacheFileName(for: selectedLocation))
     }
 }
 

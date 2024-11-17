@@ -10,6 +10,14 @@ struct DailyMenu {
 
 
 extension DailyMenu {
+    static var noMenu: DailyMenu {
+        DailyMenu(
+            varmMat: "Ingen meny tilgjengelig i dag",
+            dagensSuppe: "",
+            dagensSalat: ""
+        )
+    }
+    
     static var mock: DailyMenu {
         DailyMenu(varmMat: "Pizza\nIndisk curry", dagensSuppe: "Tomatsuppe", dagensSalat: "Pasta salat")
     }

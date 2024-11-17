@@ -74,6 +74,7 @@
 		C87EFA362CE922D800AFC3F7 /* Exceptions for "Menu" folder in "LunchWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Helpers/DateFormatter.swift,
 				Helpers/FB38LunchMenuParser.swift,
 				Helpers/N58LunchMenuParser.swift,
 				Managers/CacheManager.swift,

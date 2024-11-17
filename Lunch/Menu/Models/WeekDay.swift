@@ -8,10 +8,7 @@ enum WeekDay: String, CaseIterable {
     case fredag = "FREDAG"
 
     static func currentDay() -> WeekDay? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE"
-        formatter.locale = Locale(identifier: "no_NO")
-        let dayName = formatter.string(from: Date()).lowercased()
+        let dayName = DateFormatter.norwegianWeekday.string(from: Date()).lowercased()
 
         switch dayName {
         case "mandag": return .mandag
