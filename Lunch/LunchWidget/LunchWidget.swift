@@ -23,10 +23,10 @@ struct Provider: AppIntentTimelineProvider {
         let calendar = Calendar.current
         let now = Date()
         
-        // Determine next Monday at 7 AM
-        let nextMondayAt7AM = calendar.nextDate(
+        // Determine next Monday at 8 AM
+        let nextMondayAt8AM = calendar.nextDate(
             after: now,
-            matching: DateComponents(hour: 7, weekday: 2), // 2 = Monday
+            matching: DateComponents(hour: 8, weekday: 2), // 2 = Monday
             matchingPolicy: .nextTime
         ) ?? now.addingTimeInterval(86400) // Default to 24 hours later if calculation fails
 
@@ -36,11 +36,11 @@ struct Provider: AppIntentTimelineProvider {
             // Generate entries from cached data
             let entries = generateEntries(from: menu, configuration: configuration)
             
-            return Timeline(entries: entries, policy: .after(nextMondayAt7AM))
+            return Timeline(entries: entries, policy: .after(nextMondayAt8AM))
         }
 
         // No cached data; return an empty timeline and update at next Monday 7 AM
-        return Timeline(entries: [], policy: .after(nextMondayAt7AM))
+        return Timeline(entries: [], policy: .after(nextMondayAt8AM))
     }
 
 }
