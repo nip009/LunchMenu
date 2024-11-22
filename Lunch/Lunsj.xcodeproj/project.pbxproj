@@ -79,6 +79,7 @@
 				Helpers/N58LunchMenuParser.swift,
 				Managers/CacheManager.swift,
 				Models/DailyMenu.swift,
+				Models/Location.swift,
 				Models/WeekDay.swift,
 			);
 			target = C83FF89D2CE919D400316DA3 /* LunchWidgetExtension */;

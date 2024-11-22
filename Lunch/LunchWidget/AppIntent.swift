@@ -5,7 +5,7 @@ struct ConfigurationAppIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource { "Velg lokasjon" }
     
     @Parameter(title: "Lunsj hos", default: .fb38)
-    var selectedLocation: LocationOption
+    var selectedLocation: Location
     
     func perform() async throws -> some IntentResult {
         // Update the shared UserDefaults

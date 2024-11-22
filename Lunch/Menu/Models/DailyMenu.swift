@@ -24,27 +24,27 @@ extension DailyMenu {
     
     static var fb38mockMenus: [String: DailyMenu] {
         return [
-            WeekDay.mandag.rawValue : DailyMenu(
+            WeekDay.monday.rawValue : DailyMenu(
                 varmMat: "Chili con Carne, tortilla chips, rømme og ris\nChili sin Carne",
                 dagensSuppe: "Spinat suppe",
                 dagensSalat: "Cæsarsalat"
             ),
-            WeekDay.tirsdag.rawValue: DailyMenu(
+            WeekDay.tuesday.rawValue: DailyMenu(
                 varmMat: "Karbonader med soppsaus, bakt potet og rotgrønnsaker\nPasta ala Vodka",
                 dagensSuppe: "Indisk kyllingsuppe",
                 dagensSalat: "Råkostsalat"
             ),
-            WeekDay.onsdag.rawValue: DailyMenu(
+            WeekDay.wednesday.rawValue: DailyMenu(
                 varmMat: "Kyllingtaco\nTortilla med panert fisk og coleslaw",
                 dagensSuppe: "Kremet paprika suppe",
                 dagensSalat: "Gresk salat"
             ),
-            WeekDay.torsdag.rawValue: DailyMenu(
+            WeekDay.thursday.rawValue: DailyMenu(
                 varmMat: "Sei Cordon Bleu\n Ratatouille og hvitløksbrød",
                 dagensSuppe: "Søtpotet suppe",
                 dagensSalat: "Pastasalat"
             ),
-            WeekDay.fredag.rawValue: DailyMenu(
+            WeekDay.friday.rawValue: DailyMenu(
                 varmMat: "Marokkansk lammegryte med krydret couscous\nChicken fried rice",
                 dagensSuppe: "Taco suppe",
                 dagensSalat: "Quinoasalat"
@@ -53,27 +53,27 @@ extension DailyMenu {
     }
     static var n58mockMenus: [String: DailyMenu] {
         return [
-            WeekDay.mandag.rawValue : DailyMenu(
+            WeekDay.monday.rawValue : DailyMenu(
                 varmMat: "Blabla",
                 dagensSuppe: "Tomat suppe",
                 dagensSalat: "Blomkål salat"
             ),
-            WeekDay.tirsdag.rawValue: DailyMenu(
+            WeekDay.tuesday.rawValue: DailyMenu(
                 varmMat: "Spaghetti\nPizza",
                 dagensSuppe: "Blomkålsuppe",
                 dagensSalat: "Pasta salat"
             ),
-            WeekDay.onsdag.rawValue: DailyMenu(
+            WeekDay.wednesday.rawValue: DailyMenu(
                 varmMat: "BlablaKyllingtaco\nTortilla med panert fisk og coleslaw",
                 dagensSuppe: "Kremet paprika suppe",
                 dagensSalat: "Gresk salat"
             ),
-            WeekDay.torsdag.rawValue: DailyMenu(
+            WeekDay.thursday.rawValue: DailyMenu(
                 varmMat: "BlablaSei Cordon Bleu\n Ratatouille og hvitløksbrød",
                 dagensSuppe: "Søtpotet suppe",
                 dagensSalat: "Pastasalat"
             ),
-            WeekDay.fredag.rawValue: DailyMenu(
+            WeekDay.friday.rawValue: DailyMenu(
                 varmMat: "Marokkansk lammegryte med krydret couscous\nChicken fried rice",
                 dagensSuppe: "Taco suppe",
                 dagensSalat: "Quinoasalat"

@@ -15,7 +15,7 @@ class CacheManager {
     private init() {}
     
     func cacheFileName(for selectedLocation: String? = nil) -> String {
-        let selectedLocation = selectedLocation ?? UserDefaults.shared.string(forKey: "selectedLocation") ?? "FB38"
+        let selectedLocation = selectedLocation ?? UserDefaults.shared.string(forKey: "selectedLocation") ?? Location.fb38.rawValue
         return "\(selectedLocation)_LunchMenuCache.json"
     }
 

@@ -10,7 +10,7 @@ struct ContentView: View {
     @AppStorage("showMenuPickerOnMainView") private var showMenuPickerOnMainView: Bool = false
     @AppStorage("showLocationPickerOnMainView") private var showLocationPickerOnMainView: Bool = false
     @AppStorage("showPayLinkOnMainView") private var showPayLinkOnMainView: Bool = false
-    @AppStorage("selectedLocation", store: UserDefaults.shared) private var selectedLocation: String = "N58"
+    @AppStorage("selectedLocation", store: UserDefaults.shared) private var selectedLocation: String = Location.n58.rawValue
     
     @State private var lunchMenu: [String: DailyMenu] = [:]
     @State private var errorMessage: String?
@@ -55,9 +55,10 @@ struct ContentView: View {
                 if showLocationPickerOnMainView {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
-                            Picker("Location", selection: $selectedLocation) {
-                                Text("FB38").tag("FB38")
-                                Text("N58").tag("N58")
+                            Picker("Lunsj hos", selection: $selectedLocation) {
+                                ForEach(Location.allCases, id: \.self) { location in
+                                    Text(location.displayName).tag(location.rawValue)
+                                }
                             }
                         } label: {
                             Image(systemName: "fork.knife.circle.fill")
@@ -135,7 +136,8 @@ struct ContentView: View {
     }
     
     func openPayLink() {
-        let urlString = selectedLocation == "FB38" ? fb38PayURLString : n58PayURLString
+        guard let location = Location(rawValue: selectedLocation) else { return }
+        let urlString = location == .fb38 ? fb38PayURLString : n58PayURLString
         if let url = URL(string: urlString) {
             openURL(url)
         }
@@ -157,7 +159,9 @@ struct ContentView: View {
         
         let fb38URLString = "https://fb38.squarespace.com/meny"
         let n58URLString = "https://drittserver.net/lunsj/"
-        let urlString = selectedLocation == "FB38" ? fb38URLString : n58URLString
+        
+        guard let location = Location(rawValue: selectedLocation) else { return }
+        let urlString = location == .fb38 ? fb38URLString : n58URLString
 
         // Fetch from the website
         guard let url = URL(string: urlString) else {
@@ -229,9 +233,10 @@ struct ContentView: View {
     }
     
     private func parseAndSetMenu(_ html: String) {
-        if selectedLocation == "FB38" {
+        guard let location = Location(rawValue: selectedLocation) else { return }
+        if location == .fb38 {
             parseFB38AndSetMenu(html)
-        } else if selectedLocation == "N58" {
+        } else if location == .n58 {
             parseN58AndSetMenu(html)
         }
     }

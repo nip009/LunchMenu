@@ -8,15 +8,16 @@ struct SettingsView: View {
     @AppStorage("showDagensVarmMat") private var showDagensVarmMat: Bool = true
     @AppStorage("showDagensSuppe") private var showDagensSuppe: Bool = true
     @AppStorage("showDagensSalat") private var showDagensSalat: Bool = false
-    @AppStorage("selectedLocation", store: UserDefaults.shared) private var selectedLocation: String = "N58"
+    @AppStorage("selectedLocation", store: UserDefaults.shared) private var selectedLocation: String = Location.n58.rawValue
     
     var body: some View {
         List {
             Section(header: Text("Lunsj hos")) {
                 Menu {
                     Picker("Lunsj hos", selection: $selectedLocation) {
-                        Text("FB38").tag("FB38")
-                        Text("N58").tag("N58")
+                        ForEach(Location.allCases, id: \.self) { location in
+                            Text(location.displayName).tag(location.rawValue)
+                        }
                     }
                 } label: {
                     Label("\(selectedLocation)", systemImage: "fork.knife.circle.fill")
