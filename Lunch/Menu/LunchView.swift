@@ -86,7 +86,7 @@ struct LunchView: View {
         if let today = WeekDay.currentDay(), let todayMenu = viewModel.lunchMenu[today.rawValue] {
             DailyMenuView(day: today, menu: todayMenu)
         } else {
-            Text("Ingen meny tilgjengelig i dag")
+            Text("Ingen meny tilgjengelig")
         }
     }
     

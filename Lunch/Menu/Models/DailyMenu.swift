@@ -8,11 +8,10 @@ struct DailyMenu {
     }
 }
 
-
 extension DailyMenu {
     static var noMenu: DailyMenu {
         DailyMenu(
-            varmMat: "Ingen meny tilgjengelig i dag",
+            varmMat: "Ingen meny tilgjengelig",
             dagensSuppe: "",
             dagensSalat: ""
         )
@@ -54,7 +53,7 @@ extension DailyMenu {
     static var n58mockMenus: [String: DailyMenu] {
         return [
             WeekDay.monday.rawValue : DailyMenu(
-                varmMat: "Blabla",
+                varmMat: "Pizza",
                 dagensSuppe: "Tomat suppe",
                 dagensSalat: "Blomkål salat"
             ),
@@ -64,12 +63,12 @@ extension DailyMenu {
                 dagensSalat: "Pasta salat"
             ),
             WeekDay.wednesday.rawValue: DailyMenu(
-                varmMat: "BlablaKyllingtaco\nTortilla med panert fisk og coleslaw",
+                varmMat: "Kyllingtaco\nTortilla med panert fisk og coleslaw",
                 dagensSuppe: "Kremet paprika suppe",
                 dagensSalat: "Gresk salat"
             ),
             WeekDay.thursday.rawValue: DailyMenu(
-                varmMat: "BlablaSei Cordon Bleu\n Ratatouille og hvitløksbrød",
+                varmMat: "Sei Cordon Bleu\n Ratatouille og hvitløksbrød",
                 dagensSuppe: "Søtpotet suppe",
                 dagensSalat: "Pastasalat"
             ),

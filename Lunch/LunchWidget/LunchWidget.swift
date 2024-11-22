@@ -20,28 +20,77 @@ struct Provider: AppIntentTimelineProvider {
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        let calendar = Calendar.current
         let now = Date()
-        
-        // Determine next Monday at 8 AM
-        let nextMondayAt8AM = calendar.nextDate(
-            after: now,
-            matching: DateComponents(hour: 8, weekday: 2), // 2 = Monday
-            matchingPolicy: .nextTime
-        ) ?? now.addingTimeInterval(86400) // Default to 24 hours later if calculation fails
+        let nextMondayAt8AM = getNextMonday(at: 8, from: now)
 
+        // Load cached data and generate entries
         if let cachedData = CacheManager.shared.loadFromCache(for: configuration.selectedLocation.rawValue),
-           let menu = parseMenu(cachedData.data, configuration: configuration) {
+           let menuDict = parseMenu(cachedData.data, configuration: configuration) {
             
-            // Generate entries from cached data
-            let entries = generateEntries(from: menu, configuration: configuration)
-            
+            // Generate timeline entries, accounting for after-1 PM logic
+            let entries = generateWeeklyEntries(from: menuDict, startDate: now, configuration: configuration)
             return Timeline(entries: entries, policy: .after(nextMondayAt8AM))
         }
 
         return Timeline(entries: [], policy: .after(nextMondayAt8AM))
     }
 
+
+    private func getNextMonday(at hour: Int, from date: Date) -> Date {
+        let calendar = Calendar.current
+        return calendar.nextDate(
+            after: date,
+            matching: DateComponents(hour: hour, weekday: 2), // 2 = Monday
+            matchingPolicy: .nextTime
+        ) ?? date
+    }
+
+    private func createEntry(for date: Date, configuration: ConfigurationAppIntent) -> SimpleEntry {
+        let calendar = Calendar.current
+        let now = Date()
+
+        // Determine the day offset based on the time
+        let hour = calendar.component(.hour, from: now)
+        let dayOffset = hour >= 13 ? 1 : 0 // Switch to tomorrow's menu after 1 PM
+
+        // Calculate the target date
+        let targetDate = calendar.date(byAdding: .day, value: dayOffset, to: now)!
+        let dayName = DateFormatter.norwegianWeekday.string(from: targetDate).uppercased()
+
+        // Retrieve the menu for the target day
+        let cachedData = CacheManager.shared.loadFromCache(for: configuration.selectedLocation.rawValue)
+        let menuDict = cachedData.flatMap { parseMenu($0.data, configuration: configuration) } ?? [:]
+        let menu = WeekDay(rawValue: dayName).flatMap { menuDict[$0.rawValue] } ?? DailyMenu.noMenu
+
+        return SimpleEntry(date: targetDate, day: dayName.capitalized, menu: menu, configuration: configuration)
+    }
+
+    private func generateWeeklyEntries(from menus: [String: DailyMenu], startDate: Date, configuration: ConfigurationAppIntent) -> [SimpleEntry] {
+        let calendar = Calendar.current
+        var entries: [SimpleEntry] = []
+        let now = Date()
+
+        // Determine if we should show today or tomorrow's menu based on time
+        let hour = calendar.component(.hour, from: now)
+        let startDayOffset = hour >= 13 ? 1 : 0
+
+        // Generate entries for the rest of the week
+        for offset in startDayOffset..<7 {
+            guard let baseDate = calendar.date(byAdding: .day, value: offset, to: startDate) else { continue }
+            
+            // Set the time to 1 PM for each day's entry
+            guard let entryDate = calendar.date(bySettingHour: 13, minute: 0, second: 0, of: baseDate) else { continue }
+            
+            let dayName = DateFormatter.norwegianWeekday.string(from: baseDate).uppercased()
+            let menu = WeekDay(rawValue: dayName).flatMap { menus[$0.rawValue] } ?? DailyMenu.noMenu
+
+            let entry = SimpleEntry(date: entryDate, day: dayName.capitalized, menu: menu, configuration: configuration)
+            entries.append(entry)
+        }
+
+        return entries
+    }
+    
 }
 
 func parseMenu(_ html: String, configuration: ConfigurationAppIntent) -> [String: DailyMenu]? {
@@ -82,39 +131,6 @@ private func parseN58Menu(_ html: String) -> [String: DailyMenu]? {
     }
     return nil
 }
-
-func generateEntries(from menus: [String: DailyMenu], configuration: ConfigurationAppIntent) -> [SimpleEntry] {
-    var entries: [SimpleEntry] = []
-    let calendar = Calendar.current
-    let today = calendar.startOfDay(for: Date())
-    let todayWeekday = calendar.component(.weekday, from: today) // 1 is Sunday, 2 is Monday, etc.
-    
-    // Calculate the start of the week (Monday)
-    let startOfWeek = calendar.date(byAdding: .day, value: todayWeekday == 1 ? -6 : -(todayWeekday - 2), to: today)!
-    
-    for offset in 0..<7 {
-        guard let date = calendar.date(byAdding: .day, value: offset, to: startOfWeek) else { continue }
-        
-        // Get the weekday name in Norwegian
-        let dayName = DateFormatter.norwegianWeekday.string(from: date).uppercased()
-        
-        // Use the WeekDay enum to find the menu
-        let menu = WeekDay(rawValue: dayName).flatMap { menus[$0.rawValue] } ?? .noMenu
-        
-        entries.append(
-            SimpleEntry(
-                date: date,
-                day: dayName.capitalized,
-                menu: menu,
-                configuration: configuration
-            )
-        )
-    }
-    
-    return entries
-}
-
-
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
