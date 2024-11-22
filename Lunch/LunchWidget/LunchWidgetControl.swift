@@ -1,10 +1,3 @@
-//
-//  LunchWidgetControl.swift
-//  LunchWidget
-//
-//  Created by Simen Lien on 16/11/2024.
-//
-
 import AppIntents
 import SwiftUI
 import WidgetKit

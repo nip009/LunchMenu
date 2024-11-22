@@ -1,10 +1,3 @@
-//
-//  LunchWidgetLiveActivity.swift
-//  LunchWidget
-//
-//  Created by Simen Lien on 16/11/2024.
-//
-
 import ActivityKit
 import WidgetKit
 import SwiftUI

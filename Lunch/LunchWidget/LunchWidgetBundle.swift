@@ -1,10 +1,3 @@
-//
-//  LunchWidgetBundle.swift
-//  LunchWidget
-//
-//  Created by Simen Lien on 16/11/2024.
-//
-
 import WidgetKit
 import SwiftUI
 

@@ -14,12 +14,11 @@ class CacheManager {
     static let shared = CacheManager()
     private init() {}
     
-    func cacheFileName(for selectedLocation: String? = nil) -> String {
-        let selectedLocation = selectedLocation ?? UserDefaults.shared.string(forKey: "selectedLocation") ?? Location.fb38.rawValue
+    func cacheFileName(for selectedLocation: String) -> String {
         return "\(selectedLocation)_LunchMenuCache.json"
     }
 
-    func saveToCache(data: String, for selectedLocation: String? = nil) {
+    func saveToCache(data: String, for selectedLocation: String) {
         guard !data.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             print("Error: Attempted to save empty or invalid data to cache.")
             return
@@ -41,10 +40,9 @@ class CacheManager {
         }
     }
 
-    func loadFromCache(for selectedLocation: String? = nil) -> (data: String, isExpired: Bool)? {
-        if let selectedLocation {
-            UserDefaults.shared.set(selectedLocation, forKey: "selectedLocation")
-        }
+    func loadFromCache(for selectedLocation: String) -> (data: String, isExpired: Bool)? {
+        UserDefaults.shared.set(selectedLocation, forKey: "selectedLocation")
+        
         let fileURL = getCacheFileURL(for: selectedLocation)
 
         guard FileManager.default.fileExists(atPath: fileURL.path) else {
@@ -93,7 +91,7 @@ class CacheManager {
         }
     }
 
-    private func getCacheFileURL(for selectedLocation: String? = nil) -> URL {
+    private func getCacheFileURL(for selectedLocation: String) -> URL {
         guard let cachesDirectory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
             fatalError("Failed to access shared App Group directory.")
         }

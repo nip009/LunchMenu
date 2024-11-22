@@ -39,7 +39,6 @@ struct Provider: AppIntentTimelineProvider {
             return Timeline(entries: entries, policy: .after(nextMondayAt8AM))
         }
 
-        // No cached data; return an empty timeline and update at next Monday 7 AM
         return Timeline(entries: [], policy: .after(nextMondayAt8AM))
     }
 

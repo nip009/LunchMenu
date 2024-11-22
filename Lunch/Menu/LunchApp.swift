@@ -4,7 +4,7 @@ import SwiftUI
 struct LunchApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LunchView()
         }
     }
 }
